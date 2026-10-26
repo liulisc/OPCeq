@@ -107,6 +107,62 @@ ui <- page_navbar(
         color: #2f75b5;
         margin-right: 10px;
       }
+      
+      .compare-box {
+        margin-top: 22px;
+        padding-top: 12px;
+        border-top: 1px solid #dee2e6;
+      }
+      
+      .compare-box h4 {
+        margin-bottom: 8px;
+      }
+      
+      .compare-box h5 {
+        margin-top: 16px;
+        margin-bottom: 6px;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+      
+      .compare-box .shiny-options-group {
+        margin-top: 4px;
+      }
+      
+      .compare-box .checkbox {
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
+      
+      .anova-panel {
+        margin-top: 12px;
+      }
+      
+      .star-note {
+        margin: 8px 16px 12px 16px;
+        color: #555;
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+      
+      .across-main-panel {
+        margin-top: 18px;
+        padding: 16px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background: #fff;
+      }
+      
+      .across-main-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      
+      .across-main-header h4 {
+        margin: 0;
+      }
   
     "))
   ),
@@ -174,6 +230,16 @@ ui <- page_navbar(
               label = tagList(icon("circle-chevron-right"), "Grinberg et al (2026)"),
               class = "source-button active-source"
             ),
+            actionButton(
+              "source_alzheimer",
+              label = tagList(icon("circle-chevron-right"), "Alzheimer"),
+              class = "source-button"
+            ),
+            actionButton(
+              "source_schizophrenia",
+              label = tagList(icon("circle-chevron-right"), "Schizophrenia"),
+              class = "source-button"
+            ),
             # 
             # actionButton(
             #   "source_mouse_microglia",
@@ -193,6 +259,32 @@ ui <- page_navbar(
                   $(this).addClass('active-source');
                 });
               "))
+          ),
+          
+          div(
+            class = "compare-box",
+            h4("Compare categories"),
+            h5("Human"),
+            checkboxGroupInput(
+              "human_clusters",
+              label = NULL,
+              choices = c(
+                "Developmental OPC",
+                "Proliferative (G1-to-S phase)",
+                "Proliferative OPC",
+                "Synaptic OPC"
+              )
+            ),
+            h5("Mouse"),
+            checkboxGroupInput(
+              "mouse_clusters",
+              label = NULL,
+              choices = c(
+                "Active OPC",
+                "Homeostatic OPC",
+                "Proliferative OPC"
+              )
+            )
           )
           
         )
@@ -215,8 +307,10 @@ ui <- page_navbar(
           ),
           plotOutput(
             "human_vln",
-            height = "200px"
-          )
+            height = "260px"
+          ),
+          uiOutput("human_star_note"),
+          uiOutput("human_anova_panel")
         ),
         
         br(),
@@ -234,9 +328,15 @@ ui <- page_navbar(
           ),
           plotOutput(
             "mouse_vln",
-            height = "200px"
-          )
-        )
+            height = "260px"
+          ),
+          uiOutput("mouse_star_note"),
+          uiOutput("mouse_anova_panel")
+        ),
+        
+        br(),
+        
+        uiOutput("across_main_panel")
       )
     )
   ),
